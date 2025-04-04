@@ -820,13 +820,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c50402b1713b8a449a1f9a0184dd8fe5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  size: 4
+  size: 5
   Buttonprefab: {fileID: 8294236835059187055, guid: 1097da47ad1eb13428696000a5008e02, type: 3}
   grid: {fileID: 711006907}
   turn: {fileID: 844682777}
   winText: {fileID: 2005805993}
   OScore: {fileID: 339022297}
   XScore: {fileID: 2103788234}
+  check: 4
 --- !u!1 &1881178369
 GameObject:
   m_ObjectHideFlags: 0

@@ -1,7 +1,9 @@
 using System;
+using System.Drawing;
 using UnityEditor.UIElements;
 using UnityEngine;
 using UnityEngine.InputSystem.Android;
+using UnityEngine.SocialPlatforms.Impl;
 using UnityEngine.UI;
 using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCounters;
 
@@ -9,7 +11,7 @@ using static UnityEditor.Experimental.AssetDatabaseExperimental.AssetDatabaseCou
 public class sscore_ : MonoBehaviour
 {
     GridLayoutGroup gridLayoutGroup;
-    public int size = 3;
+    public int size;
     public GameObject Buttonprefab; // button prifab
     //public Transform grid; // grid
     public RectTransform grid; // grid
@@ -19,7 +21,7 @@ public class sscore_ : MonoBehaviour
     public Text OScore;
     public Text XScore;
     private int Counter = 0;
-    private int check = 3;
+    public int check = 3;
     int Score_O = 0;
     int Score_X = 0;
 
@@ -56,8 +58,8 @@ public class sscore_ : MonoBehaviour
 
                 Button h = clone.GetComponent<Button>();
                 Text t = clone.GetComponentInChildren<Text>();
-                
-               
+
+
                 buttons[i, j] = h;
 
                 h.onClick.AddListener(() =>
@@ -80,7 +82,7 @@ public class sscore_ : MonoBehaviour
         }
     }
 
-   
+
 
     //---------------------------------------------reverse-------------------------------------------------------------
     public void Reset_bt()
@@ -100,7 +102,7 @@ public class sscore_ : MonoBehaviour
         Score_O = 0;
         Score_X = 0;
     }
-    
+
     //--------------------------------------------Wincheck-----------------------------------------------
     void WinCheck()
     {
@@ -109,166 +111,250 @@ public class sscore_ : MonoBehaviour
         //==========================row==========================
         for (int i = 0; i < size; i++)
         {
-            for (int j = 0; j < size - check + 1 ; j++)
+            for (int j = 0; j < size - check + 1; j++)
             {
                 Ocounter = 0;
                 Xcounter = 0;
-                int[] arr = new int[check];
+
                 for (int k = j; k < j + check; k++)
                 {
                     Text t = buttons[i, k].GetComponentInChildren<Text>();
                     if (t.text == "O")
-                    { 
+                    {
                         Ocounter++;
-                        print("OC:  " + Ocounter);
-                    }                  
+                    }
                     else if (t.text == "X")
                     {
                         Xcounter++;
-                        print("XC:  "+Xcounter);
                     }
-                }               
+                }
                 if (Ocounter == check)
                 {
                     Score_O++;
                     OScore.text = Score_O.ToString();
-                    print("Score_O: " + Score_O);
-                    for (int h = 0; h < size; h++)
+                    for (int k = j; k < j + check; k++)
                     {
-                        Text t = buttons[i, h].GetComponentInChildren<Text>();
-                        //t.text = "";
-                        arr[h] = i;
-                        if (arr[0] == arr[1] && arr[1]== arr[2] && arr[2] == arr[3])
-                        {
-                            t.text = "";
-                        }
+                        Text t = buttons[i, k].GetComponentInChildren<Text>();
+                        t.text = "";
                     }
                 }
-                else if (Xcounter ==  check)
+                else if (Xcounter == check)
                 {
                     Score_X++;
                     XScore.text = Score_X.ToString();
-                    print("Score_X: " + Score_O);
-                    for (int h = 0; h < size ; h++)
+                    for (int k = j; k < j + check; k++)
                     {
-                        Text t = buttons[i, h].GetComponentInChildren<Text>();
-                        //t.text = "";
-                         arr[h] = i;
-                        if (arr[0] == arr[1] && arr[1] == arr[2] && arr[2] == arr[3])
-                        {
-                            t.text = "";
-                        }
+                        Text t = buttons[i, k].GetComponentInChildren<Text>();
+                        t.text = "";
+
                     }
                 }
             }
         }
-            //if (Ocounter == size || Xcounter == size)
-            //{
-            //    Score_O += Ocounter == size ? 1 : 0;
-            //    Score_X += Xcounter == size ? 1 : 0;
-            //    OScore.text = Score_O.ToString();
-            //    XScore.text = Score_X.ToString();
-            //    for (int j = 0; j < size; j++)
-            //    {
-            //        Text t = buttons[i, k].GetComponentInChildren<Text>();
-            //        t.text = "";
-            //    }
-            //}
+        //if (Ocounter == size || Xcounter == size)
+        //{
+        //    Score_O += Ocounter == size ? 1 : 0;
+        //    Score_X += Xcounter == size ? 1 : 0;
+        //    OScore.text = Score_O.ToString();
+        //    XScore.text = Score_X.ToString();
+        //    for (int j = 0; j < size; j++)
+        //    {
+        //        Text t = buttons[i, k].GetComponentInChildren<Text>();
+        //        t.text = "";
+        //    }
+        //}
         //====================================column=============================
-        /*for (int i = 0; i < size; i++)
+        for (int j = 0; j < size; j++)
         {
-            for (int j = 0; j < size - check +1; j++)
+            for (int i = 0; i < size - check + 1; i++)
             {
                 Ocounter = 0;
                 Xcounter = 0;
-                for (int k = j; k < j+check; k++)
+                for (int k = i; k < i + check; k++)
                 {
-
                     Text t = buttons[k, j].GetComponentInChildren<Text>();
                     if (t.text == "O") Ocounter++;
                     else if (t.text == "X") Xcounter++;
                 }
-                if (Ocounter == check || Xcounter == check)
+                if (Ocounter == check)
                 {
-                    Score_O += Ocounter == size ? 1 : 0;
-                    Score_X += Xcounter == size ? 1 : 0;
+                    Score_O++;
                     OScore.text = Score_O.ToString();
-                    XScore.text = Score_X.ToString();
-                    for (int h = 0; h < size; h++)
+                    for (int k = i; k < i + check; k++)
                     {
-                        Text t = buttons[i, h].GetComponentInChildren<Text>();
+                        Text t = buttons[k, j].GetComponentInChildren<Text>();
                         t.text = "";
-                    }
 
+                    }
+                }
+                else if (Xcounter == check)
+                {
+                    Score_X++;
+                    XScore.text = Score_X.ToString();
+                    for (int k = i; k < i + check; k++)
+                    {
+                        Text t = buttons[k, j].GetComponentInChildren<Text>();
+                        t.text = "";
+
+                    }
                 }
             }
-            
-        }*/
-            //if (Ocounter == size)
-            //{
-            //    Score_O++;
-            //    OScore.text = Score_O.ToString();
-            //    winText.text = "O is Win";
-            //}
-            //else if (Xcounter == size)
-            //{
-            //    Score_X++;
-            //    XScore.text = Score_X.ToString();
-            //    winText.text = "X is Win";
-            //}
+
+        }
+        //if (Ocounter == size)
+        //{
+        //    Score_O++;
+        //    OScore.text = Score_O.ToString();
+        //    winText.text = "O is Win";
+        //}
+        //else if (Xcounter == size)
+        //{
+        //    Score_X++;
+        //    XScore.text = Score_X.ToString();
+        //    winText.text = "X is Win";
+        //}
         //======================primary diagonal===============================
-        Xcounter = 0;
-        Ocounter = 0;
-        for (int i = 0; i < size; i++)
+        /*
+        00 11 22 
+        01 12 23
+        10 21 32
+        11 22 33
+         */
+        for (int i = 0; i < size - check + 1; i++)
         {
-            Text t = buttons[i, i].GetComponentInChildren<Text>();
-            if (t.text == "X") Xcounter++;
-            else if (t.text == "O") Ocounter++;
-        }
-        if (Ocounter == size || Xcounter == size)
-        {
-            Score_O += Ocounter == size ? 1 : 0;
-            Score_X += Xcounter == size ? 1 : 0;
-            OScore.text = Score_O.ToString();
-            XScore.text = Score_X.ToString();
-            for (int i = 0; i < size; i++)
+            for (int j = 0; j < size - check + 1; j++)
             {
-                Text t = buttons[i, i].GetComponentInChildren<Text>();
-                t.text = "";
-            }
+                Xcounter = 0;
+                Ocounter = 0;
+                for (int k = 0; k < check; k++)
+                {
+                    Text t = buttons[i + k, k + j].GetComponentInChildren<Text>();
+                    if (t.text == "X") Xcounter++;
+                    else if (t.text == "O") Ocounter++;
+                }
+                if (Ocounter == check)
+                {
+                    Score_O++;
+                    OScore.text = Score_O.ToString();
+                    for (int k = 0; k < check; k++)
+                    {
+                        Text t = buttons[i + k, k + j].GetComponentInChildren<Text>();
+                        t.text = "";
 
+                    }
+                }
+                else if (Xcounter == check)
+                {
+                    Score_X++;
+                    XScore.text = Score_X.ToString();
+                    for (int k = 0; k < check; k++)
+                    {
+                        Text t = buttons[i + k, k + j].GetComponentInChildren<Text>();
+                        t.text = "";
+
+                    }
+                }
+
+            }
         }
+
         //======================secondry diagonal=================================================
-        Xcounter = 0;
-        Ocounter = 0;
-        for (int i = 0; i < size; i++)
+        /*
+       02 11 20
+       03 12 21
+       12 21 30
+       13 22 31
+       */
+        for (int i = 0; i < size - check + 1; i++)
         {
-            Text t = buttons[i, size - i - 1].GetComponentInChildren<Text>();
-            if (t.text == "X")
+            for (int j = 0; j < size - check + 1; j++)
             {
-                
-                Xcounter++; 
-
-            }
-            else if (t.text == "O")
-            {
-                Ocounter++;
-
+                Xcounter = 0;
+                Ocounter = 0;
+                for (int k = 0; k < check; k++)
+                {
+                    Text t = buttons[i + k, size - j - k - 1].GetComponentInChildren<Text>();
+                    if (t.text == "X") Xcounter++;
+                    else if (t.text == "O") Ocounter++;
+                }
+                if (Ocounter == check)
+                {
+                    Score_O++;
+                    OScore.text = Score_O.ToString();
+                    for (int k = 0; k < check; k++)
+                    {
+                        Text t = buttons[i + k, size - j - k - 1].GetComponentInChildren<Text>();
+                        t.text = "";
+                    }
+                }
+                else if (Xcounter == check)
+                {
+                    Score_X++;
+                    XScore.text = Score_X.ToString();
+                    for (int k = 0; k < check; k++)
+                    {
+                        Text t = buttons[i + k, size - j - k - 1].GetComponentInChildren<Text>();
+                        t.text = "";
+                    }
+                }
             }
         }
-        if (Ocounter == size || Xcounter == size)
-        {
-            Score_O += Ocounter == size ? 1 : 0;
-            Score_X += Xcounter == size ? 1 : 0;
-            OScore.text = Score_O.ToString();
-            XScore.text = Score_X.ToString();
-            for (int i = 0; i < size; i++)
-            {
-                Text t = buttons[i, size - i -1].GetComponentInChildren<Text>();
-                t.text = "";
-            }
-        }    
+        displayWin();
     }
-   
- 
+    public void displayWin()
+    {
+        for (int i = 0; i < size; i++)
+        {
+            for (int j = 0; j < size; j++)
+            {
+                Text t = buttons[i, j].GetComponentInChildren<Text>();
+                if (t.text == "")
+                {
+                    return;
+                }
+               
+            } 
+        }
+        if (Score_O > Score_X)
+        {
+            winText.text = "O is Win";
+        }
+        else if (Score_X > Score_O)
+        {
+            winText.text = "X is Win";
+        }
+        else
+        {      
+        winText.text = "game over";
+        }
+
+    }
 }
+//if (Score_O > Score_X)
+//{
+//    winText.text = "O is Win";
+//}
+//else if (Score_X > Score_O)
+//{
+//    winText.text = "X is Win";
+//}
+//else if (Counter == size * size)
+//{
+//    winText.text = "DRAW";
+//}
+//else
+//{
+//    winText.text = "";
+//}
+//if (Ocounter == size || Xcounter == size)
+//{
+//    Score_O += Ocounter == size ? 1 : 0;
+//    Score_X += Xcounter == size ? 1 : 0;
+//    OScore.text = Score_O.ToString();
+//    XScore.text = Score_X.ToString();
+//    for (int i = 0; i < size; i++)
+//    {
+//        Text t = buttons[i, size - i - 1].GetComponentInChildren<Text>();
+//        t.text = "";
+//    }
+//}

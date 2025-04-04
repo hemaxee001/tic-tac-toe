@@ -164,8 +164,20 @@ public class three_by_three : MonoBehaviour
         {
             winText.text = "DRAW";
         }
+        //if (Ocounter == size || Xcounter == size)
+        //{
+        //    Score_O += Ocounter == size ? 1 : 0;
+        //    Score_X += Xcounter == size ? 1 : 0;
+        //    OScore.text = Score_O.ToString();
+        //    XScore.text = Score_X.ToString();
+        //    for (int i = 0; i < size; i++)
+        //    {
+        //        Text t = buttons[i, size - i - 1].GetComponentInChildren<Text>();
+        //        t.text = "";
+        //    }
+        //}
     }
-   
+
 
 }
 
